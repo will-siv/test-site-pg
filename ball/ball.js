@@ -1,5 +1,5 @@
 
-let updateBall;
+let updateCanvas;
 let ball = document.getElementById("ball");
 const tracker = document.getElementById("tracker");
 let peakEnergy = 0;
@@ -13,10 +13,11 @@ class Ball {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.vx = Math.random() * 10;
-        this.vy = 0;
+        this.vx = Math.floor(Math.random() * 10);
+        this.vy = 5;
     }
 }
+
 let c = document.getElementById("ball-canvas");
 
 c.width = window.innerWidth;
@@ -28,10 +29,19 @@ function onResize() {
 }
 
 let ctx = c.getContext("2d");
+let mouseX, mouseY;
+let lastmX = 0, lastmY = 0;
+let mouseVX, mouseVY;
+let width = 50;
+
+window.addEventListener("mousemove", e => {
+    mouseX = e.x;
+    mouseY = e.y;
+});
 
 const b = new Ball(c.width/2, c.height/2);
 
-updateBall = function() {
+updateCanvas = function() {
     // clear canvas
     ctx.clearRect(0, 0, c.width, c.height);
 
@@ -58,29 +68,31 @@ updateBall = function() {
     b.vy -= g;
     b.y -= b.vy;
 
+    // do logic for paddle
+    mouseVX = (mouseX - lastmX);
+    mouseVY = (mouseY - lastmY);
+
     // draw ball at location
     ctx.strokeStyle = `rgb(255 255 255)`;
     ctx.beginPath();
     ctx.arc(b.x, b.y, radius, 0, 2 * Math.PI);
     ctx.stroke();
 
-    // update tracker
-    let v = Math.sqrt((b.vy * b.vy) + (b.vx * b.vx));
-    let kE = (1/2) * v * v;
-    let pE = g * Math.abs(b.y - c.height);
-    if (peakEnergy < kE + pE) peakEnergy = kE + pE;
-    let text = `current y pos: ${b.y} | <br>
-    current y vel: ${b.vy} <br>
-    kinetic energy: ${kE} <br>
-    potential energy: ${pE} <br>
-    total energy: ${kE + pE} <br>
-    max energy: ${peakEnergy}
-    `;
-    tracker.innerHTML = text;
+    // draw paddle at location
+    ctx.linewidth = 24;
+    ctx.beginPath();
+    ctx.moveTo(mouseX - width/2, mouseY);
+    ctx.lineTo(mouseX + width/2, mouseY);
+    ctx.stroke();
 
-    window.requestAnimationFrame(updateBall);
+    window.requestAnimationFrame(updateCanvas);
+    lastmX = mouseX;
+    lastmY = mouseY;
+
+    tracker.innerHTML = `
+    vx: ${mouseVX} <br>
+    vy: ${mouseVY}
+    `;
 }
 
-updateBall();
-
-window.addEventListener("resize", onResize);
+updateCanvas();

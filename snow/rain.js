@@ -1,3 +1,5 @@
+// rain.js by dimden.dev
+// modelling site animations from this file
 let stopRain;
 let rainStopped = localStorage.disablerain == '1';
 let rainElements = [...document.getElementsByClassName("rain-hitbox"), document.getElementById("oneko"), "cursor"];

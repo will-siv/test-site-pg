@@ -1,0 +1,23 @@
+{
+  "name": "test-site-pg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "bash .env; node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/will-siv/test-site-pg.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/will-siv/test-site-pg/issues"
+  },
+  "homepage": "https://github.com/will-siv/test-site-pg#readme",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
